@@ -13,6 +13,7 @@ const (
 	QueryPwdStr    = "SELECT uid,password FROM users WHERE username = ?;"
 	QueryRePwdStr  = "SELECT uid,re_password FROM users WHERE username = ?;"
 	UpdatePwdStr   = "UPDATE users SET password = ? WHERE username = ?;"
+	DeleteUserStr  = "DELETE FROM users WHERE uid = ?;"
 )
 
 var db *sql.DB
@@ -79,5 +80,11 @@ func QueryRePwd(username string) (int, string, error) {
 // UpdatePwd 更新密码
 func UpdatePwd(user *model.ParamResetPwdUser) error {
 	_, err := db.Exec(UpdatePwdStr, user.Password, user.Username)
+	return err
+}
+
+// DeleteUser 删除用户
+func DeleteUser(uid int) error {
+	_, err := db.Exec(DeleteUserStr, uid)
 	return err
 }

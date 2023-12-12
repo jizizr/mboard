@@ -11,6 +11,8 @@ const (
 	AddCommentReplyStr = "INSERT INTO comments (from_uid, to_uid,to_mid,message,reply_to_id) VALUES (?, ?, ?, ?, ?)"
 	GetCommentStr      = "SELECT mid,from_uid,message,created_at FROM comments WHERE to_uid = ? AND reply_to_id IS NULL"
 	GetCommentReplyStr = "SELECT mid,from_uid,to_uid,to_mid,message,created_at FROM comments WHERE reply_to_id = ?"
+	DeleteCommentStr   = "DELETE FROM comments WHERE mid = ?"
+	GetCommentFromStr  = "SELECT from_uid FROM comments WHERE mid = ?"
 )
 
 // PostComment 添加评论
@@ -95,4 +97,20 @@ func GetCommentReply(stmt *sql.Stmt, replyID int64) ([]*model.Reply, error) {
 		replys = append(replys, &reply)
 	}
 	return replys, nil
+}
+
+// DeleteComment 删除评论
+func DeleteComment(mid int64) error {
+	_, err := db.Exec(DeleteCommentStr, mid)
+	return err
+}
+
+// GetCommentFrom 获取评论发出者
+func GetCommentFrom(mid int64) (int, error) {
+	var fromUID int
+	err := db.QueryRow(GetCommentFromStr, mid).Scan(&fromUID)
+	if err != nil {
+		return -1, err
+	}
+	return fromUID, nil
 }

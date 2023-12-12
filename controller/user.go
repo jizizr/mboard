@@ -114,3 +114,18 @@ func Login(c *gin.Context) {
 		Token: token,
 	})
 }
+
+// DeleteUser 删除用户
+func DeleteUser(c *gin.Context) {
+	uid, ok := utils.GetUid(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	if err := services.DeleteUser(uid); err != nil {
+		RespFailed(c, CodeServiceBusy)
+		log.Printf("%v", err)
+		return
+	}
+	RespSuccess(c, nil)
+}

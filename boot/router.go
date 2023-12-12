@@ -22,6 +22,7 @@ func InitRouters() {
 	private.Use(middleware.JWTAuth)
 	{
 		private.POST("/comment", controller.PostComment)
+		private.DELETE("/comment/:mid", controller.DeleteComment)
 	}
 
 	r.Run(":8080")

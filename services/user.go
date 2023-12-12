@@ -56,3 +56,8 @@ func Login(ParamUser *model.ParamLoginUser) (int, string, error) {
 	token, _ := utils.GenToken(uid)
 	return uid, token, nil
 }
+
+// DeleteUser 删除用户
+func DeleteUser(uid int) error {
+	return mysql.DeleteUser(uid)
+}

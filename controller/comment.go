@@ -55,3 +55,32 @@ func GetComment(c *gin.Context) {
 	}
 	RespSuccess(c, commentInfo)
 }
+
+func DeleteComment(c *gin.Context) {
+	uid, ok := utils.GetUid(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+
+	id := c.Param("mid")
+	//string to int
+	mid, err := strconv.ParseInt(id, 10, 64)
+
+	if uidFrom, err := services.GetCommentFrom(mid); err != nil || uidFrom != uid {
+		RespFailed(c, CodeInvalidUser)
+		return
+	}
+
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	err = services.DeleteComment(mid)
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		log.Printf("%v", err)
+		return
+	}
+	RespSuccess(c, nil)
+}

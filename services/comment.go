@@ -15,3 +15,12 @@ func PostComment(comment *model.ParamComment) (int64, error) {
 func GetComment(uid int) ([]*model.CommentInfo, error) {
 	return mysql.GetComment(uid)
 }
+
+func DeleteComment(mid int64) error {
+	return mysql.DeleteComment(mid)
+}
+
+// GetCommentFrom 获取评论发出者
+func GetCommentFrom(mid int64) (int, error) {
+	return mysql.GetCommentFrom(mid)
+}
